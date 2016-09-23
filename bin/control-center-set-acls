@@ -1,0 +1,77 @@
+#!/bin/bash
+# (Copyright) [2016 - 2016] Confluent, Inc.
+
+#
+# Use shellcheck to lint this file
+#
+
+set -ue
+
+usage() {
+  echo "$(basename "$0")": ERROR: "$*" 1>&2
+  echo usage: "$(basename "$0")" 'props_file' 1>&2
+  exit 1
+}
+
+props_file=""
+EXTRA_ARGS=()
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -*) #Pass through anything that begins with -
+      EXTRA_ARGS+=("$1")
+      shift
+      ;;
+    *) #Treat anything else as properties file
+      props_file="$1"
+      shift
+      ;;
+  esac
+done
+
+if [ -z "$props_file" ]
+then
+  usage "Properties file is required"
+fi
+
+extract_prop_value() {
+  local PROP="$1"
+  local DEFAULT="$2"
+  local VALUE=""
+  VALUE=$(grep -m 1 -e "^\s*${PROP}\s*=" "$props_file" | awk -F'=' '{ print $2 }')
+  if [ ! -z "$VALUE" ]
+  then
+    VALUE="${VALUE%\"}"
+    VALUE="${VALUE#\"}"
+    echo "$VALUE"
+    return;
+  fi
+  echo "$DEFAULT"
+}
+INTERMEDIATE_TOPICS=(Group-FIFTEEN_SECONDS-changelog Group-ONE_HOUR-changelog Group-ONE_WEEK-changelog MonitoringMessageAggregatorWindows-FIFTEEN_SECONDS-changelog MonitoringMessageAggregatorWindows-ONE_HOUR-changelog MonitoringMessageAggregatorWindows-ONE_WEEK-changelog MonitoringStream-FIFTEEN_SECONDS-changelog MonitoringStream-ONE_HOUR-changelog MonitoringStream-ONE_WEEK-changelog MonitoringVerifierStore-changelog aggregate-topic-partition aggregate-topic-partition-changelog aggregatedTopicPartitionTableWindows-FIFTEEN_SECONDS-changelog aggregatedTopicPartitionTableWindows-ONE_HOUR-changelog aggregatedTopicPartitionTableWindows-ONE_WEEK-changelog error-topic group-aggregate-topic-FIFTEEN_SECONDS group-aggregate-topic-FIFTEEN_SECONDS-changelog group-aggregate-topic-ONE_HOUR group-aggregate-topic-ONE_HOUR-changelog group-aggregate-topic-ONE_WEEK group-aggregate-topic-ONE_WEEK-changelog group-stream-extension-rekey group-stream-extension-rekey-changelog monitoring-aggregate-rekey monitoring-aggregate-rekey-changelog monitoring-message-rekey)
+ZK_CONNECT="localhost:2181"
+CONTROL_CENTER_NAME="_confluent-controlcenter"
+CONTROL_CENTER_ID="0"
+MONITORING_TOPIC="_confluent-monitoring"
+
+ZK_CONNECT=$(extract_prop_value "zookeeper.connect" "$ZK_CONNECT")
+CONTROL_CENTER_NAME=$(extract_prop_value "confluent.controlcenter.name" "$CONTROL_CENTER_NAME")
+CONTROL_CENTER_ID=$(extract_prop_value "confluent.controlcenter.id" "$CONTROL_CENTER_ID")
+APP_ID="$CONTROL_CENTER_NAME-$CONTROL_CENTER_ID"
+MONITORING_TOPIC=$(extract_prop_value "confluent.monitoring.interceptor.topic" "$MONITORING_TOPIC")
+
+: "${PRINCIPAL:="User:kafkaclient"}"
+
+bin_dir=$(dirname "$0")
+
+for topic_suffix in "${INTERMEDIATE_TOPICS[@]}"
+do
+  topic="$APP_ID-$topic_suffix"
+  echo "Setting acls for topic $topic"
+  "$bin_dir"/control-center-run-class kafka.admin.AclCommand --authorizer-properties zookeeper.connect="$ZK_CONNECT" --add --allow-principal "$PRINCIPAL" --producer --topic "$topic" > /dev/null 2>&1 || echo "Failed"
+  "$bin_dir"/control-center-run-class kafka.admin.AclCommand --authorizer-properties zookeeper.connect="$ZK_CONNECT" --add --allow-principal "$PRINCIPAL" --consumer --group "$APP_ID" --topic "$topic" > /dev/null 2>&1 || echo "Failed"
+done
+
+echo "Setting acls for topic $MONITORING_TOPIC"
+"$bin_dir"/control-center-run-class kafka.admin.AclCommand --authorizer-properties zookeeper.connect="$ZK_CONNECT" --add --allow-principal "$PRINCIPAL" --producer --topic "$MONITORING_TOPIC" > /dev/null 2>&1 || echo "Failed"
+"$bin_dir"/control-center-run-class kafka.admin.AclCommand --authorizer-properties zookeeper.connect="$ZK_CONNECT" --add --allow-principal "$PRINCIPAL" --consumer --group "$APP_ID" --topic "$MONITORING_TOPIC" > /dev/null 2>&1 || echo "Failed"
+

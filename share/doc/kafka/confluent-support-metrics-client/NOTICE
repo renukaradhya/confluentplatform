@@ -1,0 +1,91 @@
+The following libraries are included in packaged versions of this project:
+
+* Apache Avro
+ * COPYRIGHT: Copyright 2010 The Apache Software Foundation
+ * LICENSE: licenses/LICENSE.apache2.txt
+ * NOTICE: licenses/NOTICE.avro.txt
+ * HOMEPAGE: http://avro.apache.org
+ 
+* Apache Commons BeanUtils
+ * COPYRIGHT: Copyright 2000-2016 The Apache Software Foundation
+ * LICENSE: licenses/LICENSE.apache2.txt
+ * NOTICE: licenses/NOTICE.commons-beanutils.txt
+ * HOMEPAGE: http://commons.apache.org/proper/commons-beanutils/
+ 
+* Apache Commons Codec
+ * COPYRIGHT: Copyright 2002-2016 The Apache Software Foundation
+ * LICENSE: licenses/LICENSE.apache2.txt
+ * NOTICE: licenses/NOTICE.commons-codec.txt
+ * HOMEPAGE: http://commons.apache.org/proper/commons-codec/
+
+* Apache Commons Collections
+ * COPYRIGHT: Copyright 2001-2016 The Apache Software Foundation
+ * LICENSE: licenses/LICENSE.apache2.txt
+ * NOTICE: licenses/NOTICE.commons-collections.txt
+ * HOMEPAGE: http://commons.apache.org/proper/commons-collections/
+
+* Apache Commons Compress
+ * COPYRIGHT: Copyright 2002-2015 The Apache Software Foundation
+ * LICENSE: licenses/LICENSE.apache2.txt
+ * NOTICE: licenses/NOTICE.commons-compress.txt
+ * HOMEPAGE: http://commons.apache.org/proper/commons-compress/
+
+* Apache Commons Lang
+ * COPYRIGHT: Copyright 2001-2016 The Apache Software Foundation
+ * LICENSE: licenses/LICENSE.apache2.txt
+ * NOTICE: licenses/NOTICE.commons-lang.txt
+ * HOMEPAGE: http://commons.apache.org/proper/commons-lang/
+
+* Apache Commons Logging
+ * COPYRIGHT: Copyright 2003-2016 The Apache Software Foundation
+ * LICENSE: licenses/LICENSE.apache2.txt
+ * NOTICE: licenses/NOTICE.commons-logging.txt
+ * HOMEPAGE: http://commons.apache.org/proper/commons-logging/
+
+* Apache Commons Validator
+ * COPYRIGHT: Copyright 2001-2016 The Apache Software Foundation
+ * LICENSE: licenses/LICENSE.apache2.txt
+ * NOTICE: licenses/NOTICE.commons-validator.txt
+ * HOMEPAGE: http://commons.apache.org/proper/commons-validator/
+
+* Apache HttpComponents HTTP Client
+ * COPYRIGHT: Copyright 1999-2016 The Apache Software Foundation
+ * LICENSE: licenses/LICENSE.apache2.txt
+ * NOTICE: licenses/NOTICE.httpclient.txt
+ * HOMEPAGE: https://hc.apache.org
+
+* Apache HttpComponents HTTP Core
+ * COPYRIGHT: Copyright 2005-2015 The Apache Software Foundation
+ * LICENSE: licenses/LICENSE.apache2.txt
+ * NOTICE: licenses/NOTICE.httpcore.txt
+ * HOMEPAGE: https://hc.apache.org
+
+* Apache HttpComponents HTTP Mime
+ * COPYRIGHT: Copyright 1999-2016 The Apache Software Foundation
+ * LICENSE: licenses/LICENSE.apache2.txt
+ * NOTICE: licenses/NOTICE.httpmime.txt
+ * HOMEPAGE: https://hc.apache.org
+
+* Jackson 1.x
+ * LICENSE: licenses/LICENSE.apache2.txt (Apache 2)
+ * HOMEPAGE: http://github.com/FasterXML/jackson
+
+* paranamer
+ * COPYRIGHT: Copyright (c) 2006 Paul Hammant & ThoughtWorks Inc
+ * LICENSE: licenses/LICENSE.bsd.txt
+ * HOMEPAGE: http://xircles.codehaus.org/projects/paranamer
+
+* SLF4J
+ * COPYRIGHT: Copyright (c) 2004-2013 QOS.ch
+ * LICENSE: licenses/LICENSE.mit.txt
+ * HOMEPAGE: http://www.slf4j.org/
+
+* snappy-java
+ * LICENSE: licenses/LICENSE.apache2.txt
+ * NOTICE: licenses/NOTICE.snappy-java.txt
+ * HOMEPAGE: https://github.com/xerial/snappy-java
+
+* XZ for Java
+ * COPYRIGHT: Original Author: Lasse Collin <lasse.collin@tukaani.org>
+ * LICENSE: Public Domain
+ * HOMEPAGE: http://tukaani.org/xz/java.html

@@ -1,0 +1,47 @@
+#!/bin/bash
+#
+# Copyright 2015 Confluent Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+base_dir="${dir}/.."
+
+CAMUS_LIBJARS=""
+# Support either the in-tree development version or the packaged version
+for dir in ${base_dir}/camus-example/target/confluent-camus-*-package ${base_dir}; do
+  if [ -e "${dir}/share/java/camus/" ]; then
+    HADOOP_CLASSPATH="${HADOOP_CLASSPATH}:${dir}/share/java/camus/*"
+    CAMUS_JAR=`ls ${dir}/share/java/camus/confluent-camus-*.jar`
+    for jar in ${dir}/share/java/camus/*.jar; do
+      if [ -z "${CAMUS_LIBJARS}" ]; then
+        CAMUS_LIBJARS=${jar}
+      else
+        CAMUS_LIBJARS=${CAMUS_LIBJARS},${jar}
+      fi
+    done
+  fi
+done
+
+if [ -z "$HADOOP_CLASSPATH" -o -z "$CAMUS_LIBJARS" -o -z "$CAMUS_JAR" ]; then
+    >&2 echo "Couldn't find all required Camus components."
+    >&2 echo "HADOOP_CLASSPATH: $HADOOP_CLASSPATH"
+    >&2 echo "CAMUS_LIBJARS: $CAMUS_LIBJARS"
+    >&2 echo "CAMUS_JAR: $CAMUS_JAR"
+    exit 1
+fi
+
+export HADOOP_CLASSPATH
+export CAMUS_LIBJARS
+export CAMUS_JAR
+export HADOOP_USER_CLASSPATH_FIRST=true
